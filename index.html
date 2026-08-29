@@ -724,7 +724,10 @@ function acceptCookies() {
   localStorage.setItem("cookiesAccepted", "true");
   document.getElementById("cookieBox").style.display = "none";
 }
-</script>
+function toggleProfileMenu(e) {
+  e.stopPropagation();
+  document.getElementById('profileDropdown').classList.toggle('active');
+}
 </script>
 </body>
       </html>
