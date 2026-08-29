@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +13,11 @@
     <div class="hamburger" id="hamburger" onclick="toggleMenu()">
       <span></span><span></span><span></span>
     </div>
-    
+    <a href="index.html" class="logo">
+      <svg class="logo-box" viewBox="0 0 24 24" fill="none" stroke="#ff7a00" stroke-width="2">
+        <rect x="5" y="2" width="14" height="20" rx="2"/>
+      </svg>
+      <div class="logo-text">
         <h2>MobileX</h2>
         <span>YOUR WORLD, CONNECTED</span>
       </div>
@@ -31,7 +36,9 @@
       <circle cx="12" cy="7" r="4"/>
     </svg>
   </a>
-  </div>
+</div>
+      </div>
+  </nav>
 
   <div class="mobile-menu" id="mobileMenu">
     <a href="#home" class="active" onclick="closeMenu()">HOME</a>
@@ -107,8 +114,7 @@
       </div>
       <div class="brands-row">
         <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/2/24/Samsung_Logo.svg" alt="Samsung">
-        <img src="https://upload.wikimedia.org/wikipedia/commons/4/49/Realme_Logo.svg" alt="Realme">
+
       </div>
       <div class="off-badge">UP TO<br>30%<br>OFF</div>
     </div>
@@ -482,244 +488,4 @@
           </p>
           <p class="contact-item">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
-            </svg>
-            (234) 801-234-5678
-          </p>
-          <p class="contact-item">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
-            </svg>
-            support@mobilex.ng
-          </p>
-        </div>
-      </div>
-    </div>
-  </footer>
-  <div id="toast" class="toast"></div>
-  <!-- COOKIE CONSENT BANNER -->
-<div id="cookieBox" class="cookie-box">
-  <p>
-    We use cookies to improve your experience. By using this site, you agree to our use of cookies.
-  </p>
-  <button onclick="acceptCookies()">Got it</button>
-</div>
-<script>
-// ---- COOKIE BANNER LOGIC ----
-  function checkCookieConsent() {
-    const consent = localStorage.getItem('mobilexCookieConsent');
-    if (!consent) {
-      document.getElementById('cookieBanner').classList.add('active');
-    }
-  }
-
-  function acceptCookies() {
-    localStorage.setItem('mobilexCookieConsent', 'accepted');
-    document.getElementById('cookieBanner').classList.remove('active');
-  }
-
-  // Run on page load
-  checkCookieConsent();
-  function toggleMenu() {
-    document.getElementById('hamburger').classList.toggle('active');
-    document.getElementById('mobileMenu').classList.toggle('active');
-  }
-  function closeMenu() {
-    document.getElementById('hamburger').classList.remove('active');
-    document.getElementById('mobileMenu').classList.remove('active');
-  }
-
-  function handleProductChange() {
-    const type = document.getElementById('productType').value;
-    document.getElementById('phoneTypeGroup').style.display = (type === 'Phone') ? 'block' : 'none';
-    document.getElementById('accessoryTypeGroup').style.display = (type === 'Accessories') ? 'block' : 'none';
-  }
-
-  function sendToWhatsApp() {
-    const productType = document.getElementById('productType').value;
-    const phoneType = document.getElementById('phoneType').value;
-    const accessoryType = document.getElementById('accessoryType').value;
-    const priceRange = document.getElementById('priceRange').value;
-    const extraNote = document.getElementById('extraNote').value;
-
-    if (!productType) {
-      alert('Please select what you are looking for.');
-      return;
-    }
-    if (!priceRange) {
-      alert('Please select a budget range.');
-      return;
-    }
-
-    let message = "Hi MobileX, I'm interested in the following:%0A";
-    message += "Category: " + productType + "%0A";
-
-    if (productType === 'Phone') {
-      message += "Phone: " + (phoneType || 'Not specified') + "%0A";
-    }
-    if (productType === 'Accessories') {
-      message += "Accessory: " + (accessoryType || 'Not specified') + "%0A";
-    }
-
-    message += "Budget: " + priceRange + "%0A";
-
-    if (extraNote) {
-      message += "Note: " + extraNote + "%0A";
-    }
-
-    const whatsappNumber = "2349169272657";
-    const url = "https://wa.me/" + whatsappNumber + "?text=" + message;
-    window.open(url, "_blank");
-  }
-
-  // ---- NAVBAR: LOGIN ICON vs PROFILE MENU ----
-  function renderNavIcons() {
-    const navIcons = document.getElementById('navIcons');
-    const user = JSON.parse(localStorage.getItem('mobilexLoggedInUser') || 'null');
-
-    if (user) {
-      const initial = user.name.trim().charAt(0).toUpperCase();
-      const firstName = user.name.trim().split(' ')[0];
-
-      navIcons.innerHTML = `
-        <div class="profile-wrap">
-          <button class="profile-btn" onclick="toggleProfileMenu(event)">
-            <span class="profile-avatar">${initial}</span>
-            <span class="profile-name">${firstName}</span>
-          </button>
-          <div class="profile-dropdown" id="profileDropdown">
-            <p class="dropdown-name">${user.name}</p>
-            <p class="dropdown-email">${user.email}</p>
-            <hr>
-            <a href="#" class="logout-link" onclick="return logoutUser()">Log Out</a>
-          </div>
-        </div>
-      `;
-    } else {
-      navIcons.innerHTML = `
-        <a href="login.html" title="Log In / Sign Up">
-          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        </a>
-      `;
-    }
-  }
-
-  function toggleProfileMenu(e) {
-    e.stopPropagation();
-    document.getElementById('profileDropdown').classList.toggle('active');
-  }
-
-  document.addEventListener('click', function () {
-    const dropdown = document.getElementById('profileDropdown');
-    if (dropdown) dropdown.classList.remove('active');
-  });
-
-  // ---- UPDATED LOGOUT WITH REDIRECT TO LOGIN.HTML ----
-  function logoutUser() {
-    localStorage.removeItem('mobilexLoggedInUser');
-    window.location.href = 'login.html';
-    return false;
-  }
-
-  renderNavIcons();
-  // ---- FAQ TOGGLE ----
-function toggleFAQ(btn) {
-  const answer = btn.nextElementSibling;
-  const icon = btn.querySelector('span');
-  
-  // Close all other FAQs
-  document.querySelectorAll('.faq-answer').forEach(item => {
-    if(item !== answer) {
-      item.classList.remove('active');
-      item.previousElementSibling.classList.remove('active');
-      item.previousElementSibling.querySelector('span').textContent = '+';
-    }
-  });
-
-  // Toggle clicked FAQ
-  answer.classList.toggle('active');
-  btn.classList.toggle('active');
-  icon.textContent = answer.classList.contains('active') ? '−' : '+';
-}
-// ---- BLOG READ MORE TOGGLE ----
-function toggleBlog(btn) {
-  const fullText = btn.previousElementSibling; // the .blog-full div
-  const isOpen = fullText.style.maxHeight && fullText.style.maxHeight !== '0px';
-  
-  if(!isOpen || fullText.style.maxHeight === '0px') {
-    fullText.style.maxHeight = '500px'; // big enough to show all text
-    btn.textContent = 'Show Less ←';
-  } else {
-    fullText.style.maxHeight = '0';
-    btn.textContent = 'Read More →';
-  }
-}
-// ---- GOOGLE MAP: OPTIONAL - SCROLL TO MAP WHEN CLICKED FROM NAV ----
-document.addEventListener('DOMContentLoaded', function() {
-  const locationLink = document.querySelector('a[href="#location"]');
-  
-  if(locationLink) {
-    locationLink.addEventListener('click', function(e) {
-      e.preventDefault();
-      document.getElementById('location').scrollIntoView({ 
-        behavior: 'smooth' 
-      });
-    });
-  }
-});
-
-
-function showToast(message) {
-  const toast = document.getElementById("toast");
-  toast.innerText = message;
-  toast.classList.add("show");
-
-  setTimeout(() => {
-    toast.classList.remove("show");
-  }, 2500);
-}
-
-function sendToWhatsApp() {
-  const productType = document.getElementById('productType').value;
-  const phoneType = document.getElementById('phoneType').value;
-  const accessoryType = document.getElementById('accessoryType').value;
-  const priceRange = document.getElementById('priceRange').value;
-  const extraNote = document.getElementById('extraNote').value;
-
-  if (!productType) {
-    showToast("Please select what you are looking for");
-    return;
-  }
-
-  if (!priceRange) {
-    showToast("Please select a budget range");
-    return;
-  }
-
-  let message = `Hello, I want a ${productType}`;
-  if (phoneType) message += ` (${phoneType})`;
-  if (accessoryType) message += ` - ${accessoryType}`;
-  message += ` within ${priceRange}`;
-  if (extraNote) message += `. Note: ${extraNote}`;
-
-  const phoneNumber = "2349169272657";
-  const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
-
-  window.open(url, "_blank");
-}
-
-
-window.onload = function () {
-  if (!localStorage.getItem("cookiesAccepted")) {
-    document.getElementById("cookieBox").style.display = "block";
-  }
-};
-
-function acceptCookies() {
-  localStorage.setItem("cookiesAccepted", "true");
-  document.getElementById("cookieBox").style.display = "none";
-}
-</script>
-</script>
-</body>
-</html>
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.
