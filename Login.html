@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MobileX - Log In / Sign Up</title>
+<link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ALERT POPUP -->
+  <div class="alert-overlay" id="alertOverlay">
+    <div class="alert-box">
+      <div class="alert-icon" id="alertIcon">✓</div>
+      <p class="alert-message" id="alertMessage"></p>
+      <button class="alert-ok-btn" onclick="closeAlert()">OK</button>
+    </div>
+  </div>
+
+  <!-- NAVBAR -->
+  <nav class="navbar">
+    <a href="index.html" class="logo">
+      <svg class="logo-box" viewBox="0 0 24 24" fill="none" stroke="#ff7a00" stroke-width="2">
+        <rect x="5" y="2" width="14" height="20" rx="2"/>
+      </svg>
+      <div class="logo-text">
+        <h2>MobileX</h2>
+        <span>YOUR WORLD, CONNECTED</span>
+      </div>
+    </a>
+  </nav>
+
+  <!-- AUTH SECTION -->
+  <div class="auth-wrapper">
+    <div class="auth-container" id="authContainer">
+
+      <!-- SIGN UP FORM -->
+      <div class="form-container sign-up-container">
+        <form id="signupForm" onsubmit="return handleSignup(event)">
+          <h2>Create Your Account</h2>
+          <p class="auth-subtitle">Sign up to start shopping on MobileX</p>
+
+          <div class="form-group">
+            <label for="signupName">Full Name</label>
+            <input type="text" id="signupName" placeholder="Your full name" required>
+          </div>
+
+          <div class="form-group">
+            <label for="signupEmail">Email</label>
+            <input type="email" id="signupEmail" placeholder="you@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="signupPassword">Password</label>
+            <input type="password" id="signupPassword" placeholder="Create a password" required>
+          </div>
+
+          <div class="form-group">
+            <label for="signupConfirm">Confirm Password</label>
+            <input type="password" id="signupConfirm" placeholder="Re-enter your password" required>
+          </div>
+
+          <p class="auth-error" id="signupError"></p>
+
+          <button type="submit" class="btn auth-submit">Sign Up</button>
+
+          <p class="mobile-switch">Already have an account? <span onclick="showSignIn()">Log In</span></p>
+        </form>
+      </div>
+
+      <!-- LOG IN FORM -->
+      <div class="form-container sign-in-container">
+        <form id="loginForm" onsubmit="return handleLogin(event)">
+          <h2>Welcome Back</h2>
+          <p class="auth-subtitle">Log in to continue to MobileX</p>
+
+          <div class="form-group">
+            <label for="loginEmail">Email</label>
+            <input type="email" id="loginEmail" placeholder="you@example.com" required>
+          </div>
+
+          <div class="form-group">
+            <label for="loginPassword">Password</label>
+            <input type="password" id="loginPassword" placeholder="Enter your password" required>
+          </div>
+
+          <p class="auth-error" id="loginError"></p>
+
+          <button type="submit" class="btn auth-submit">Log In</button>
+
+          <p class="mobile-switch">Don't have an account? <span onclick="showSignUp()">Sign Up</span></p>
+        </form>
+      </div>
+
+      <!-- SLIDING OVERLAY (desktop) -->
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h2>Welcome Back!</h2>
+            <p>Already have an account? Log in to pick up right where you left off.</p>
+            <button type="button" class="ghost-btn" onclick="showSignIn()">Log In</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h2>Hello, Friend!</h2>
+            <p>New to MobileX? Create an account and start shopping today.</p>
+            <button type="button" class="ghost-btn" onclick="showSignUp()">Sign Up</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script>
+  const authContainer = document.getElementById('authContainer');
+
+  function showSignUp() {
+    authContainer.classList.add('right-panel-active');
+  }
+
+  function showSignIn() {
+    authContainer.classList.remove('right-panel-active');
+  }
+
+  // ---- HELPERS ----
+  function getUsers() {
+    return JSON.parse(localStorage.getItem('mobilexUsers') || '[]');
+  }
+  function saveUsers(users) {
+    localStorage.setItem('mobilexUsers', JSON.stringify(users));
+  }
+
+  function showAlert(message, type = 'success') {
+    const overlay = document.getElementById('alertOverlay');
+    const icon = document.getElementById('alertIcon');
+    const msg = document.getElementById('alertMessage');
+
+    icon.className = 'alert-icon ' + type;
+    icon.textContent = type === 'success' ? '✓' : '✕';
+    msg.textContent = message;
+
+    overlay.classList.add('show');
+  }
+
+  function closeAlert() {
+    document.getElementById('alertOverlay').classList.remove('show');
+  }
+
+  // ---- SIGN UP ----
+  function handleSignup(e) {
+    e.preventDefault();
+    const name = document.getElementById('signupName').value.trim();
+    const email = document.getElementById('signupEmail').value.trim().toLowerCase();
+    const password = document.getElementById('signupPassword').value;
+    const confirm = document.getElementById('signupConfirm').value;
+    const errorEl = document.getElementById('signupError');
+
+    errorEl.textContent = '';
+
+    if (password !== confirm) {
+      errorEl.textContent = 'Passwords do not match.';
+      return false;
+    }
+    if (password.length < 6) {
+      errorEl.textContent = 'Password must be at least 6 characters.';
+      return false;
+    }
+
+    let users = getUsers();
+    if (users.some(u => u.email === email)) {
+      errorEl.textContent = 'An account with this email already exists.';
+      return false;
+    }
+
+    users.push({ name, email, password });
+    saveUsers(users);
+
+    showAlert('Account created! You can now log in.', 'success');
+    document.getElementById('signupForm').reset();
+
+    setTimeout(() => showSignIn(), 1500);
+    return false;
+  }
+
+  // ---- LOGIN ----
+  function handleLogin(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value.trim().toLowerCase();
+    const password = document.getElementById('loginPassword').value;
+    const errorEl = document.getElementById('loginError');
+
+    errorEl.textContent = '';
+
+    const users = getUsers();
+    const match = users.find(u => u.email === email && u.password === password);
+
+    if (!match) {
+      errorEl.textContent = 'Incorrect email or password.';
+      return false;
+    }
+
+    localStorage.setItem('mobilexLoggedInUser', JSON.stringify({ name: match.name, email: match.email }));
+    showAlert('Welcome back, ' + match.name + '!', 'success');
+    setTimeout(() => window.location.href = 'index.html', 1500);
+    return false;
+  }
+</script>
+</body>
+</html>
